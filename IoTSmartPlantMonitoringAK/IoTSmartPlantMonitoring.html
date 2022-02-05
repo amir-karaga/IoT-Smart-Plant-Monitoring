@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        body,html{
+            height: 100%;
+            width: 100%;
+            margin:0;
+            display: block;
+            background-color:rgb(49, 51, 50);
+        }
+      .indikatori{
+        display: inline-block;
+        width: 10%;
+        height: 10%;
+        background-color: aqua;
+      }
+      .dugme{
+        width: 10%;
+        height: 10%;
+        padding: 5px;
+        margin: 5px;
+      }
+      #temp{
+          display: block;
+          height:40px;
+          width:100%;
+          background-color: aqua;
+      }
+      #vlaz{
+          display: block;
+          height:40px;
+          width:100%;
+          background-color: aqua;
+      }
+      #vlaga{
+          display: block;
+          height:40px;
+          width:100%;
+          background-color: aqua;
+      }
+
+      h1 {
+            
+            text-align: center;
+            margin: 50px;
+            font-size: 18px;
+            color:white;
+        }
+        .barraTemp{
+            height: 200px;
+            width: 200px;
+            margin: auto;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .cont{
+            height: 100px;
+            width: 200px;
+        }
+        .krugId {
+            width: 150px;
+            height: 150px;
+            background-color: rgb(49, 51, 50);
+            border-radius: 50%;
+            margin: auto;
+            position: relative;
+            margin: -175px auto 50px;
+        }
+        .obruc{
+            width: 200px;
+            height: 100px;
+            background-color: rgb(49, 51, 50);
+            position: relative;
+            margin: -125px auto 50px;
+        }
+        #animacijaUpaljeno{
+            margin:0;
+            padding: 0;
+            width: 80%;
+            height:80%;
+            display: none;
+            border-radius: 10px;
+        }
+        #animacijaUgaseno{
+            margin:0;
+            padding: 0;
+            width: 80%;
+            height:80%;
+            display: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div style="display: flex; flex-direction: row; width: 100%; height: 50%;">
+    <div style="width: 33%;">
+    <h1>Temperatura</h1>
+    <div id="temperaturaId" class="barraTemp" style="transform: rotate(0deg);">
+         <div class="cont" style="background-color: rgb(143, 136, 136);"></div>
+         <div id="bojaTemp" class="cont" style="background-color: rgb(253,0,0);"></div>   
+    </div>
+    <div class="krugId"></div>
+    <div class="obruc"></div>
+    <h1 id="vrijednostTempId" style="font-size: 22px; position: relative; margin: -125px auto 50px;"></h1>
+</div>
+<div style="width: 33%;">
+    <h1>Vlažnost zraka</h1>
+    <div id="vlaznostZrakaId" class="barraTemp" style="transform: rotate(0deg);">
+         <div class="cont" style="background-color: rgb(143, 136, 136);"></div>
+         <div id="bojaVlagaZraka" class="cont" style="background-color: rgb(253,0,0);"></div>   
+    </div>
+    <div class="krugId"></div>
+    <div class="obruc"></div>
+    <h1 id="vrijednostVlazId"style="font-size: 22px; position: relative; margin: -125px auto 50px;"></h1>
+</div>
+<div style="width: 33%;">
+    <h1>Vlažnost zemlje</h1>
+    <div id="vlaznostZemljeId" class="barraTemp" style="transform: rotate(0deg);">
+         <div class="cont" style="background-color: rgb(143, 136, 136);"></div>
+         <div id="bojaVlagaZemlje" class="cont" style="background-color: rgb(253,0,0);"></div>   
+    </div>
+    <div class="krugId"></div>
+    <div class="obruc"></div>
+    <h1 id="vrijednostVlazZemljeId"style="font-size: 22px; position: relative; margin: -125px auto 50px;"></h1>
+</div>
+</div> 
+<div style="display: flex; flex-direction: row; height: 50%; width: 100%; margin:0;">
+<div id="unosPodatakaId" style="width: 35%; margin-left: 10%; margin-top:-2%;">
+    <h5 style="color: #007bff;">Podešavanje parametara navodnjavanja</h5>
+    <form>
+        <div class="form-group">
+          <label style="color: white;">Vrijednost temperature</label>
+          <input type="number" class="form-control" id="tempZrakaInput" placeholder="Unesite vrijednost temperature">
+        </div>
+        <div class="form-group">
+            <label style="color: white;">Vrijednost vlažnosti zraka</label>
+            <input type="number" class="form-control" id="vlazZrakaInput" placeholder="Unesite vrijednost vlažnosti zraka">
+          </div>
+        <div class="form-group">
+          <label style="color: white;">Vrijednost vlažnosti zemlje</label>
+          <input type="number" class="form-control" id="vlagaZemljeInput" placeholder="Unesite vrijednost vlažnosti zemlje">
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="posaljiPodatkeUBazu()">Podesi parametre</button>
+      </form> 
+<!-- 
+      <div style="width: 100%;">
+        <label style="color: white;">Vrijednost temperature</label>
+            <input type="range" name="rangeInput" min="0" max="100" style="width: 95%; background-color:tomato;" onchange="updateTextInput(this.value);">
+            <output id="textInput" style="color: white;">0</output>
+        </div>
+        <div style="width: 100%;">
+            <label style="color: white;">Vrijednost vlažnosti zraka</label>
+            <input type="range" name="rangeInput" min="0" max="100" style="width: 95%; background-color:turquoise;" onchange="updateTextInput(this.value);">
+            <output id="textInput" style="color: white;">0</output>
+        </div>
+        <div style="width: 100%;">
+            <label style="color: white;">Vrijednost vlažnosti zemlje</label>
+            <input type="range" name="rangeInput" min="0" max="100" style="width: 95%;" onchange="updateTextInput(this.value);">
+            <output id="textInput" style="color: white;">0</output>
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="posaljiPodatkeUBazu()">Podesi parametre</button> -->
+</div>
+<div id="prikazAnimacije" style="width: 65%; height:100%; padding: 0; margin-top:-2%; margin-left: 10%;">
+<h5 id="izvrsavanjeKomande" style="margin-left:28%;"></h5>
+<img src="C:\Users\Amir\Desktop\3.GODINA\1.SEMESTAR\Dizajn i razvoj IOT projekata\IoTSmartPlantMonitoringAK\Photos\AnimacijaUpaljeno.gif" id="animacijaUpaljeno">
+<img src="C:\Users\Amir\Desktop\3.GODINA\1.SEMESTAR\Dizajn i razvoj IOT projekata\IoTSmartPlantMonitoringAK\Photos\AnimacijaUgaseno.gif" id="animacijaUgaseno">
+</div>
+</div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+  apiKey: "AIzaSyBwYhKF3PMVKKLngRqvDejHUG1qz8U0Wd0",
+  authDomain: "iotprojectamir.firebaseapp.com",
+  databaseURL: "https://iotprojectamir-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "iotprojectamir",
+  storageBucket: "iotprojectamir.appspot.com",
+  messagingSenderId: "460803706019",
+  appId: "1:460803706019:web:54d8a6cee8014b72128316"
+};
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+    var indikatorVlagaZemlje =document.getElementById('bojaVlagaZemlje'); 
+    var indikatorTemp =document.getElementById('bojaTemp'); 
+    var indikatorVlaz =document.getElementById('bojaVlagaZraka'); 
+    var vrijednostTemp=document.getElementById('vrijednostTempId');
+    var vrijednostVlaz=document.getElementById('vrijednostVlazId');
+    var vrijednostVlazZemlje=document.getElementById('vrijednostVlazZemljeId');
+    var animacijaUpaljeno=document.getElementById('animacijaUpaljeno');
+    var animacijaUgaseno=document.getElementById('animacijaUgaseno');
+    var izvrsavanjeKomande=document.getElementById('izvrsavanjeKomande');
+    var dbRef = firebase.database().ref().child('Relej/Komanda1');
+    var p1Temperatura = firebase.database().ref().child('Zemljiste/temperaturaZraka');
+    var p1Vlaznost = firebase.database().ref().child('Zemljiste/vlaznostZraka');
+    var vlaga=firebase.database().ref().child('Zemljiste/vlaznostZemljista');
+    var komanda=firebase.database().ref().child('Zemljiste/komanda');
+
+    function updateTextInput(val) {
+          document.getElementById('textInput').value=val; 
+        }
+    komanda.on('value', (podatak) =>{         
+         if(podatak.val()!=0)
+         {
+           animacijaUpaljeno.style.display="block";
+           animacijaUgaseno.style.display="none";
+           izvrsavanjeKomande.innerText="Navodnjavanje upaljeno";
+           izvrsavanjeKomande.style.color="green";
+         }
+         else
+         {
+            izvrsavanjeKomande.style.color="red";
+            izvrsavanjeKomande.innerText="Navodnjavanje ugašeno";
+            animacijaUpaljeno.style.display="none";
+            animacijaUgaseno.style.display="block";
+         }
+     });
+
+    p1Temperatura.on('value', (podatak) =>{ 
+      var vrijednost1=podatak.val();
+        var temp=document.getElementById('temperaturaId');
+        temp.style.transform=("rotate("+vrijednost1*1.8+"deg)");
+        vrijednostTemp.innerHTML=vrijednost1+" °C";
+        if(podatak.val()<=20)
+        {
+         indikatorTemp.style.backgroundColor="yellow";
+        }
+        else if(podatak.val()<=25)
+        {
+           indikatorTemp.style.backgroundColor="orange";
+        }
+        else if(podatak.val()<=30)
+        {
+            indikatorTemp.style.backgroundColor="rgb(237, 82, 31)";
+        }
+        else{
+            indikatorTemp.style.backgroundColor="red";
+        }
+    });
+
+    p1Vlaznost.on('value', (podatak) =>{ 
+      var vrijednost1=podatak.val();
+        var temp=document.getElementById('vlaznostZrakaId');
+        temp.style.transform=("rotate("+vrijednost1*1.8+"deg)");
+        vrijednostVlaz.innerHTML=vrijednost1+" %";
+        if(podatak.val()<=40)
+        {
+           indikatorVlaz.style.backgroundColor="rgb(66, 227, 245)";
+        }
+        else if(podatak.val()<=60)
+        {
+           indikatorVlaz.style.backgroundColor="rgb(66, 173, 245)";
+        }
+        else 
+        {
+            indikatorVlaz.style.backgroundColor="rgb(19, 55, 237)";
+        }
+    });
+
+    
+    vlaga.on('value', (podatak) =>{
+
+        var vrijednost1=podatak.val();
+        var temp=document.getElementById('vlaznostZemljeId');
+        temp.style.transform=("rotate("+vrijednost1*0.17578125+"deg)");
+        vrijednostVlazZemlje.innerHTML=vrijednost1+" %";
+        if(podatak.val()>=900)
+        {
+            
+             indikatorVlagaZemlje.style.backgroundColor="rgb(158, 110, 27)";
+        }
+        else if(podatak.val()>=700)
+        {            
+             indikatorVlagaZemlje.style.backgroundColor="rgb(110, 84, 39)";
+        }
+        else if(podatak.val()>=500)
+        {            
+             indikatorVlagaZemlje.style.backgroundColor="rgb(79, 65, 41)";
+        }
+        else
+        {            
+             indikatorVlagaZemlje.style.backgroundColor="rgb(54, 48, 38)";
+        }
+    });
+        function posaljiPodatkeUBazu()
+        {
+            tempZraka=Number(document.getElementById('tempZrakaInput').value);
+            vlazZraka=Number(document.getElementById('vlazZrakaInput').value);
+            vlazZemlje=Number(document.getElementById('vlagaZemljeInput').value); 
+            firebase.database().ref('Parametri').set({
+                parametarTempZraka: tempZraka,
+                parametarVlazZemlje:vlazZemlje,
+                parametarVlazZraka:vlazZraka
+                    }, (error) => {
+                        if (error) {
+                    console.log("Greska u snimanju podataka!");
+                            } else {
+                    console.log("Uspjesno snimljeni podaci!");
+                }
+});
+        }
+  
+</script>
+  </body>
+</html>
